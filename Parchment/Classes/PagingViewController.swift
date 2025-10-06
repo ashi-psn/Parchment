@@ -248,6 +248,10 @@ open class PagingViewController:
         }
     }
 
+    /// 次回viewWillAppear時にリロード処理を行うか判定するフラグ
+    /// デフォルト値はマスターに合わせてtrueにする
+    public var needsReloadOnViewWillAppear: Bool = true
+
     /// A custom collection view layout that lays out all the menu items
     /// horizontally. You can customize the behavior of the layout by
     /// setting the customization properties on `PagingViewController`.
@@ -500,7 +504,11 @@ open class PagingViewController:
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         didTransitionSize = false
-        didLayoutSubviews = false
+
+        // フラグが有効な場合のみ次回表示時に再描画を行ってリロード処理をするようにする
+        if needsReloadOnViewWillAppear {
+            didLayoutSubviews = false
+        }
     }
 
     open override func viewDidLayoutSubviews() {
